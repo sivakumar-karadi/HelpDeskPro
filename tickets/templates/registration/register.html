@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | HelpDeskPro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            background: white;
+            width: 420px;
+            max-width: 92%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e293b;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 22px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .errorlist {
+            color: red;
+            font-size: 13px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <h2>Create Account</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+
+            {% if field.help_text %}
+                <small>{{ field.help_text }}</small>
+            {% endif %}
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors }}
+        {% endif %}
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

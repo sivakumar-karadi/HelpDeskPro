@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | HelpDeskPro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #243b55;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button, .back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #243b55;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover, .back:hover {
+            background: #141e30;
+        }
+
+        .helptext {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .errorlist {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>My Profile</h1>
+
+    <p>View and update your personal information.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.errors %}
+                <div class="errorlist">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit">Save Profile</button>
+    </form>
+
+    <a href="{% url 'home' %}" class="back">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HelpDesk Pro | Create Ticket</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #0f172a;
+            color: white;
+            padding: 22px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            color: #cbd5e1;
+            margin-bottom: 0;
+        }
+
+        main {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px #0000000a;
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+        }
+
+        .intro {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 20px 0 8px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            background: #2563eb;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 22px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            main {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>HelpDesk Pro</h1>
+        <p>IT Support Ticket Management System</p>
+    </header>
+
+    <main>
+        <div class="form-card">
+
+            <h2>Create a New Ticket</h2>
+
+            <p class="intro">
+                Enter the details of your IT issue below.
+                Your ticket will be saved to the database.
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label for="title">Ticket Title</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    maxlength="200"
+                    placeholder="Example: Laptop Wi-Fi not working"
+                    required
+                >
+
+                <label for="description">Issue Description</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Explain the problem you are experiencing..."
+                    required
+                ></textarea>
+
+                <label for="priority">Priority</label>
+                <select id="priority" name="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <button type="submit">Submit Ticket</button>
+            </form>
+
+            <a class="back" href="{% url 'home' %}">
+                &larr; Back to Dashboard
+            </a>
+
+        </div>
+    </main>
+
+</body>
+</html>

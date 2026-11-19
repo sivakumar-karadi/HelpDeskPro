@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket #{{ ticket.id }} | HelpDeskPro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 35px 16px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 28px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .header h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .ticket-id {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .field {
+            margin-bottom: 26px;
+        }
+
+        .field label {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .field p {
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-open {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-in-progress {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back-btn {
+            background: #64748b;
+        }
+
+        .back-btn:hover {
+            background: #475569;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .header,
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <header class="header">
+            <h1>{{ ticket.title }}</h1>
+            <p>HelpDeskPro — Support Ticket Details</p>
+        </header>
+
+        <section class="content">
+
+            <p class="ticket-id">
+                Ticket ID: #{{ ticket.id }}
+            </p>
+
+            <div class="field">
+                <label>Ticket Title</label>
+                <p>{{ ticket.title }}</p>
+            </div>
+
+            <div class="field">
+                <label>Description</label>
+                <p>{{ ticket.description|linebreaksbr }}</p>
+            </div>
+
+            <div class="field">
+                <label>Priority</label>
+                <p>
+                    <span class="badge priority-{{ ticket.priority|lower }}">
+                        {{ ticket.priority }}
+                    </span>
+                </p>
+            </div>
+
+            <div class="field">
+                <label>Current Status</label>
+                <p>
+                    {% if ticket.status == "Open" %}
+                        <span class="badge status-open">Open</span>
+                    {% elif ticket.status == "In Progress" %}
+                        <span class="badge status-in-progress">
+                            In Progress
+                        </span>
+                    {% elif ticket.status == "Resolved" %}
+                        <span class="badge status-resolved">Resolved</span>
+                    {% else %}
+                        <span class="badge">{{ ticket.status }}</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="field">
+                <label>Created On</label>
+                <p>{{ ticket.created_at|date:"d M Y, h:i A" }}</p>
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'home' %}" class="btn back-btn">
+                    Back to Dashboard
+                </a>
+
+                <a href="{% url 'create_ticket' %}" class="btn">
+                    Create New Ticket
+                </a>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>

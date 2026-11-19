@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Ticket | HelpDeskPro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1d4ed8;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .error {
+            padding: 12px;
+            color: #b91c1c;
+            background: #fee2e2;
+            border-radius: 8px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save {
+            background: #2563eb;
+            color: white;
+        }
+
+        .save:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .cancel:hover {
+            background: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Edit Ticket #{{ ticket.id }}</h1>
+
+        <p class="subtitle">
+            Update the ticket details and save your changes.
+        </p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="title">Ticket Title</label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ ticket.title }}"
+                maxlength="200"
+                required
+            >
+
+            <label for="description">Description</label>
+            <textarea
+                id="description"
+                name="description"
+                required
+            >{{ ticket.description }}</textarea>
+
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+                <option value="Low"
+                    {% if ticket.priority == "Low" %}selected{% endif %}>
+                    Low
+                </option>
+
+                <option value="Medium"
+                    {% if ticket.priority == "Medium" %}selected{% endif %}>
+                    Medium
+                </option>
+
+                <option value="High"
+                    {% if ticket.priority == "High" %}selected{% endif %}>
+                    High
+                </option>
+            </select>
+
+            <div class="buttons">
+                <button type="submit" class="button save">
+                    Save Changes
+                </button>
+
+                <a
+                    href="{% url 'ticket_detail' ticket.id %}"
+                    class="button cancel"
+                >
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

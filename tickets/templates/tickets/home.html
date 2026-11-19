@@ -1,0 +1,300 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HelpDeskPro | Dashboard</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'tickets/css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="{% url 'home' %}" class="brand">
+            HelpDeskPro
+        </a>
+
+        <div class="nav-actions">
+
+            <span class="welcome">
+                Welcome, {{ request.user.username }}
+            </span>
+
+            <a href="{% url 'create_ticket' %}" class="btn btn-primary">
+                + Create Ticket
+            </a>
+
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN CONTAINER -->
+    <main class="container">
+
+        <!-- PAGE HEADING -->
+        <section class="page-heading">
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Manage, track and resolve your support tickets.
+            </p>
+
+        </section>
+
+
+        <!-- DASHBOARD STATISTICS -->
+        <section class="stats">
+
+            <div class="stat-card total">
+                <p>Total Tickets</p>
+                <h2>{{ total_tickets }}</h2>
+            </div>
+
+            <div class="stat-card open">
+                <p>Open Tickets</p>
+                <h2>{{ open_tickets }}</h2>
+            </div>
+
+            <div class="stat-card progress">
+                <p>In Progress</p>
+                <h2>{{ in_progress_tickets }}</h2>
+            </div>
+
+            <div class="stat-card resolved">
+                <p>Resolved Tickets</p>
+                <h2>{{ resolved_tickets }}</h2>
+            </div>
+
+        </section>
+
+
+        <!-- TICKET SECTION -->
+        <section class="ticket-section">
+
+            <div class="section-header">
+
+                <h2>All Support Tickets</h2>
+
+                <!-- SEARCH FORM -->
+                <form method="GET"
+                      action="{% url 'home' %}"
+                      class="search-form">
+
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Search tickets... (Ctrl + K)"
+                        value="{{ search_query }}"
+                    >
+
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+
+                    {% if search_query %}
+                        <a href="{% url 'home' %}"
+                           class="btn btn-secondary">
+                            Clear
+                        </a>
+                    {% endif %}
+
+                </form>
+
+            </div>
+
+
+            <!-- TICKET TABLE -->
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ticket Title</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for ticket in tickets %}
+
+                        <tr>
+
+                            <td>#{{ ticket.id }}</td>
+
+                            <td>
+                                <a
+                                    href="{% url 'ticket_detail' ticket.id %}"
+                                    class="ticket-title"
+                                >
+                                    {{ ticket.title }}
+                                </a>
+                            </td>
+
+                            <td>
+                                <span class="priority priority-{{ ticket.priority|lower }}">
+                                    {{ ticket.priority }}
+                                </span>
+                            </td>
+
+                            <td>{{ ticket.status }}</td>
+
+
+                            <!-- UPDATE STATUS -->
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'update_ticket_status' ticket.id %}"
+                                    class="status-form"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <select
+                                        name="status"
+                                        class="status-select"
+                                        aria-label="Update ticket status"
+                                    >
+
+                                        <option value="Open"
+                                            {% if ticket.status == "Open" %}selected{% endif %}>
+                                            Open
+                                        </option>
+
+                                        <option value="In Progress"
+                                            {% if ticket.status == "In Progress" %}selected{% endif %}>
+                                            In Progress
+                                        </option>
+
+                                        <option value="Resolved"
+                                            {% if ticket.status == "Resolved" %}selected{% endif %}>
+                                            Resolved
+                                        </option>
+
+                                    </select>
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary btn-small"
+                                    >
+                                        Update
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+                            <td>
+
+                                <div class="actions">
+
+                                    <a
+                                        href="{% url 'edit_ticket' ticket.id %}"
+                                        class="btn btn-secondary btn-small"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="{% url 'delete_ticket' ticket.id %}"
+                                        class="delete-form"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-delete btn-small"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="6">
+
+                                <div class="empty-state">
+
+                                    <h3>No Tickets Found</h3>
+
+                                    <p>
+                                        There are no tickets to display.
+                                        Create a new support ticket to get started.
+                                    </p>
+
+                                    <a
+                                        href="{% url 'create_ticket' %}"
+                                        class="btn btn-primary"
+                                    >
+                                        Create Your First Ticket
+                                    </a>
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <p>
+            HelpDeskPro &copy; {% now "Y" %}.
+            All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- External JavaScript -->
+    <script src="{% static 'tickets/js/script.js' %}"></script>
+
+</body>
+</html>

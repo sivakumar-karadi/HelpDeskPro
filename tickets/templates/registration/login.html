@@ -1,0 +1,102 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | HelpDeskPro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 5px 20px #00000015;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e293b;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+        }
+
+        a {
+            color: #2563eb;
+        }
+
+        .bottom {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HelpDeskPro Login</h1>
+
+        {% if form.errors %}
+            <p class="error">
+                Invalid username or password. Please try again.
+            </p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="bottom">
+            Don't have an account?
+            <a href="{% url 'register' %}">Register</a>
+        </div>
+    </div>
+</body>
+</html>
+```
